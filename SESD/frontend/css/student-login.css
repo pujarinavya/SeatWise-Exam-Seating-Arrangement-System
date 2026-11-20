@@ -1,0 +1,46 @@
+/* Student Login Styles */
+.login-body {
+  background: radial-gradient(circle at 10% 20%, #EEF4FF 0%, #F8FAFC 90%);
+}
+
+.login-card-wrapper {
+  width: 100%;
+  max-width: 440px;
+}
+
+.brand-logo-circle {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #3B82F6 0%, #1E3A8A 100%);
+  color: #FFFFFF;
+  font-size: 1.75rem;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.25);
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 2rem;
+  color: #1E3A8A;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.25rem;
+}
+
+.brand-subtitle {
+  color: #64748B;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.login-card {
+  border-radius: 16px;
+  border: 1px solid #DBEAFE !important;
+  box-shadow: 0 20px 25px -5px rgba(30, 58, 138, 0.08), 0 8px 10px -6px rgba(30, 58, 138, 0.04) !important;
+}
+
+.text-navy {
+  color: #1E3A8A;
+}

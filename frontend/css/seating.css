@@ -1,0 +1,128 @@
+/* ========================================================
+   Seating Matrix Grid Styling
+   ======================================================== */
+.text-navy {
+  color: #1E3A8A !important;
+}
+
+.bg-navy {
+  background-color: #1E3A8A !important;
+}
+
+/* Legend Box */
+.legend-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.seat-allocated-sample {
+  background-color: #EEF4FF;
+  border: 2px solid #3B82F6;
+}
+
+.seat-available-sample {
+  background-color: #FFFFFF;
+  border: 2px dashed #CBD5E1;
+}
+
+/* Hall Blackboard / Podium Area */
+.podium-board {
+  background: #1E3A8A;
+  color: #FFFFFF;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(30, 58, 138, 0.15);
+}
+
+/* Hall Seating Grid */
+.hall-grid {
+  display: grid;
+  gap: 0.85rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+/* Individual Seat Box */
+.seat-card {
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 0.65rem 0.6rem;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+  position: relative;
+  min-height: 86px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.seat-card.allocated {
+  background-color: #EEF4FF;
+  border: 1.5px solid #93C5FD;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.08);
+}
+
+.seat-card.allocated:hover {
+  border-color: #2563EB;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(30, 58, 138, 0.15);
+}
+
+.seat-card.available {
+  background-color: #FAFAFA;
+  border: 1.5px dashed #CBD5E1;
+  color: #94A3B8;
+}
+
+.seat-card.available:hover {
+  background-color: #F1F5F9;
+}
+
+.seat-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: #1E3A8A;
+  margin-bottom: 0.25rem;
+}
+
+.seat-card.available .seat-tag {
+  color: #94A3B8;
+}
+
+.seat-student-roll {
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: #1E3A8A;
+  line-height: 1.2;
+}
+
+.seat-student-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.seat-student-dept {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background-color: #DBEAFE;
+  color: #1E3A8A;
+  display: inline-block;
+  margin-top: 0.2rem;
+}

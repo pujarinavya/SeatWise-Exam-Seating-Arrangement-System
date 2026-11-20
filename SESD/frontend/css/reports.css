@@ -1,0 +1,36 @@
+/* Reports CSS styles */
+.text-navy {
+  color: #1E3A8A !important;
+}
+
+.bg-navy {
+  background-color: #1E3A8A !important;
+}
+
+.print-only {
+  display: none;
+}
+
+.print-signatures {
+  display: none;
+}
+
+@media print {
+  body {
+    background: #FFFFFF !important;
+  }
+  .seatwise-navbar, .btn, .seatwise-card.mb-4, footer {
+    display: none !important;
+  }
+  #printableReportCard {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+  .print-only {
+    display: table-cell !important;
+  }
+  .print-signatures {
+    display: flex !important;
+  }
+}

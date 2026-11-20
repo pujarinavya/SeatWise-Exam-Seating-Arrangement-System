@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automatic Seating Allocation – SeatWise</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/seating.css">
+</head>
+<body>
+
+  <!-- Top Horizontal Navbar -->
+  <nav class="navbar navbar-expand-lg seatwise-navbar">
+    <div class="container-fluid px-2 px-md-4">
+      <a class="navbar-brand seatwise-brand" href="dashboard.html">
+        <i class="fas fa-th-large"></i>
+        <span>SeatWise</span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="adminNavbarContent">
+        <ul class="navbar-nav seatwise-nav-links me-auto mb-2 mb-lg-0 ms-lg-4 gap-1">
+          <li class="nav-item">
+            <a class="nav-link" href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="students.html"><i class="fas fa-user-graduate"></i> Students</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="exams.html"><i class="fas fa-file-signature"></i> Exams</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="halls.html"><i class="fas fa-door-open"></i> Halls</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="seating.html"><i class="fas fa-chair"></i> Seating</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="reports.html"><i class="fas fa-file-excel"></i> Reports</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-3">
+          <div class="nav-profile-badge">
+            <i class="fas fa-user-circle text-primary fs-5"></i>
+            <span id="navAdminName">Admin</span>
+          </div>
+          <button class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1 px-3 py-2 fw-semibold" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container-fluid px-3 px-md-5 py-4">
+
+    <!-- Page Header & Action Trigger -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+      <div>
+        <h1 class="h3 fw-bold text-navy mb-1">Automatic Seating Allocation Engine</h1>
+        <p class="text-muted small mb-0">Generate collision-free seating plans, preview hall matrices, and publish arrangements for students</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-primary-seatwise d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#generateModal" onclick="prepareGenerateModal()">
+          <i class="fas fa-cogs"></i>
+          <span>Configure &amp; Generate Seating</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Exam Selector & Publishing Control Bar -->
+    <div class="seatwise-card mb-4 p-3 bg-white">
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-5">
+          <label for="selectActiveExam" class="form-label small fw-bold text-navy mb-1">Select Examination to View:</label>
+          <select class="form-select fw-semibold" id="selectActiveExam" onchange="onExamSelectChange()">
+            <option value="">-- Choose Examination --</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="d-flex align-items-center gap-2 pt-md-3">
+            <div id="examMetaBadge">
+              <span class="badge bg-light text-muted border">No exam selected</span>
+            </div>
+            <div id="publishStatusBadge"></div>
+          </div>
+        </div>
+        <div class="col-12 col-md-3 text-md-end">
+          <div class="d-flex gap-2 justify-content-md-end pt-md-3">
+            <button class="btn btn-success d-flex align-items-center gap-2" id="publishBtn" onclick="togglePublish(1)" disabled>
+              <i class="fas fa-bullhorn"></i>
+              <span>Publish for Students</span>
+            </button>
+            <button class="btn btn-outline-danger btn-sm" id="clearAllocBtn" onclick="confirmClearSeating()" disabled title="Clear Seating Allocation">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Mode Switch: Hall-wise Visual Grid vs Student-wise Table List -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <div class="nav nav-pills" id="viewModeTabs" role="tablist">
+        <button class="nav-link active me-2" id="tabGrid" data-bs-toggle="pill" data-bs-target="#viewGrid" type="button" role="tab">
+          <i class="fas fa-th me-1"></i>Hall Seating Matrix Grid
+        </button>
+        <button class="nav-link" id="tabList" data-bs-toggle="pill" data-bs-target="#viewList" type="button" role="tab">
+          <i class="fas fa-list-ol me-1"></i>Student Allocation List
+        </button>
+      </div>
+
+      <!-- Quick Search inside current allocations -->
+      <div class="d-none d-md-block" style="min-width: 260px;">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-white text-muted"><i class="fas fa-search"></i></span>
+          <input type="text" class="form-control" id="localSeatSearch" placeholder="Search Roll No or Student..." oninput="filterVisualSeats()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend Bar for Seat Matrix -->
+    <div class="p-2 mb-3 bg-white rounded border d-flex flex-wrap align-items-center gap-3 small">
+      <span class="fw-bold text-navy"><i class="fas fa-info-circle me-1"></i>Seat Status Legend:</span>
+      <div class="d-flex align-items-center gap-1">
+        <span class="legend-box seat-allocated-sample"></span>
+        <span>Allocated Student Seat</span>
+      </div>
+      <div class="d-flex align-items-center gap-1">
+        <span class="legend-box seat-available-sample"></span>
+        <span>Available / Empty Seat</span>
+      </div>
+      <div class="d-flex align-items-center gap-1 ms-auto text-muted">
+        <span>Hover or tap any seat to inspect student details</span>
+      </div>
+    </div>
+
+    <!-- Tab Contents -->
+    <div class="tab-content" id="viewModeContent">
+
+      <!-- View 1: Visual Hall Grid Matrix -->
+      <div class="tab-pane fade show active" id="viewGrid" role="tabpanel">
+        <div id="hallGridContainer">
+          <div class="seatwise-card text-center py-5 text-muted">
+            <i class="fas fa-chair fa-3x text-primary opacity-50 mb-3"></i>
+            <h4 class="h5 fw-bold text-navy">No Seating Matrix Loaded</h4>
+            <p class="small text-muted mb-3">Select an examination above or click "Configure &amp; Generate Seating" to run the automatic allocation algorithm.</p>
+            <button class="btn btn-primary-seatwise btn-sm" data-bs-toggle="modal" data-bs-target="#generateModal" onclick="prepareGenerateModal()">
+              Run Seating Generator Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- View 2: Student-wise Table List -->
+      <div class="tab-pane fade" id="viewList" role="tabpanel">
+        <div class="seatwise-card p-0 overflow-hidden">
+          <div class="table-responsive">
+            <table class="table table-seatwise mb-0">
+              <thead>
+                <tr>
+                  <th>Roll Number</th>
+                  <th>Student Name</th>
+                  <th>Department</th>
+                  <th>Hall Name</th>
+                  <th>Room No</th>
+                  <th>Seat Number</th>
+                  <th>Grid Position</th>
+                </tr>
+              </thead>
+              <tbody id="studentAllocTableBody">
+                <tr>
+                  <td colspan="7" class="text-center py-5 text-muted">No student allocations found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Modal: Seating Generator Configuration -->
+  <div class="modal fade" id="generateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-navy text-white">
+          <h5 class="modal-title text-white">
+            <i class="fas fa-magic me-2 text-primary"></i>Automatic Seating Allocation Generator
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="generatorForm">
+          <div class="modal-body p-4">
+
+            <!-- Step 1: Select Exam -->
+            <div class="mb-3">
+              <label for="genExamSelect" class="form-label fw-bold text-navy small">1. Select Target Examination <span class="text-danger">*</span></label>
+              <select class="form-select" id="genExamSelect" required>
+                <option value="">-- Choose Examination to Allocate --</option>
+              </select>
+            </div>
+
+            <!-- Step 2: Target Students Group -->
+            <div class="row g-3 mb-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-bold text-navy small">2. Departments to Allocate <span class="text-danger">*</span></label>
+                <div class="p-2 border rounded bg-light" style="max-height: 120px; overflow-y: auto;">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="deptAll" value="ALL" checked onchange="toggleAllDepts(this)">
+                    <label class="form-check-label fw-semibold" for="deptAll">All Eligible Departments</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input dept-chk" type="checkbox" id="deptCSE" value="CSE" checked>
+                    <label class="form-check-label" for="deptCSE">Computer Science (CSE)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input dept-chk" type="checkbox" id="deptIT" value="IT" checked>
+                    <label class="form-check-label" for="deptIT">Information Technology (IT)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input dept-chk" type="checkbox" id="deptECE" value="ECE" checked>
+                    <label class="form-check-label" for="deptECE">Electronics (ECE)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input dept-chk" type="checkbox" id="deptMECH" value="MECH" checked>
+                    <label class="form-check-label" for="deptMECH">Mechanical (MECH)</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 3: Seating Preference / Strategy -->
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-bold text-navy small">3. Seating Allocation Strategy <span class="text-danger">*</span></label>
+                <div class="p-2 border rounded bg-light">
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="strategy" id="stratSeq" value="sequential" checked>
+                    <label class="form-check-label fw-semibold" for="stratSeq">
+                      Sequential Roll Numbers
+                      <small class="d-block text-muted fw-normal">Sorts students strictly by Roll Number.</small>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="strategy" id="stratAlt" value="alternate">
+                    <label class="form-check-label fw-semibold" for="stratAlt">
+                      Alternate Department Seating
+                      <small class="d-block text-muted fw-normal">Interleaves students across departments to prevent cheating.</small>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4: Available Halls Multi-select -->
+            <div class="mb-3">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <label class="form-label fw-bold text-navy small mb-0">4. Select Examination Halls <span class="text-danger">*</span></label>
+                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" onclick="selectAllHalls(true)">Select All Halls</button>
+              </div>
+              <div class="p-3 border rounded bg-light" id="hallCheckboxList" style="max-height: 150px; overflow-y: auto;">
+                <span class="text-muted small">Loading halls...</span>
+              </div>
+            </div>
+
+            <!-- Error Banner -->
+            <div id="genErrorAlert" class="alert alert-danger d-none py-2 px-3 small" role="alert">
+              <i class="fas fa-exclamation-triangle me-1"></i><span id="genErrorMsg"></span>
+            </div>
+
+          </div>
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-navy-seatwise d-flex align-items-center gap-2" id="runAlgorithmBtn">
+              <i class="fas fa-play"></i>
+              <span>Generate Seating Preview</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Seating Preview & Confirmation -->
+  <div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-navy text-white">
+          <h5 class="modal-title text-white">
+            <i class="fas fa-check-circle me-2 text-success"></i>Generated Seating Arrangement Preview
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Summary Metrics -->
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+              <div class="p-2 border rounded bg-light text-center">
+                <div class="small text-muted">Eligible Students</div>
+                <div class="fs-4 fw-bold text-navy tabular-nums" id="prevTotalStudents">0</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-2 border rounded bg-light text-center">
+                <div class="small text-muted">Total Hall Capacity</div>
+                <div class="fs-4 fw-bold text-navy tabular-nums" id="prevTotalCapacity">0</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-2 border rounded bg-light text-center">
+                <div class="small text-muted">Allocated Seats</div>
+                <div class="fs-4 fw-bold text-success tabular-nums" id="prevTotalAllocated">0</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-2 border rounded bg-light text-center">
+                <div class="small text-muted">Strategy</div>
+                <div class="fs-5 fw-bold text-primary mt-1" id="prevStrategy">Sequential</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hall Preview Tabs -->
+          <div id="previewHallMatrices">
+            <!-- Render matrices for each hall -->
+          </div>
+
+        </div>
+        <div class="modal-footer bg-light d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Back &amp; Reconfigure</button>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-primary-seatwise" onclick="confirmSaveAllocation(false)">
+              <i class="fas fa-save me-1"></i>Save as Draft
+            </button>
+            <button type="button" class="btn btn-success" onclick="confirmSaveAllocation(true)">
+              <i class="fas fa-bullhorn me-1"></i>Save &amp; Publish Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/seating.js"></script>
+</body>
+</html>

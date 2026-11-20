@@ -1,0 +1,61 @@
+/* Student Dashboard Styles */
+.student-avatar-box {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+  color: #FFFFFF;
+  font-size: 2rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.2);
+}
+
+.bg-navy {
+  background-color: #1E3A8A !important;
+}
+
+.text-navy {
+  color: #1E3A8A !important;
+}
+
+.empty-icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seat-highlight-box {
+  background: #EEF4FF;
+  border: 2px dashed #93C5FD;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.seat-big-num {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1E3A8A;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printableTicketArea, #printableTicketArea * {
+    visibility: visible;
+  }
+  #printableTicketArea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

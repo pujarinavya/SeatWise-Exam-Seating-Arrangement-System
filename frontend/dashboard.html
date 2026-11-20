@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – SeatWise Exam Seating System</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Theme CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <!-- Top Horizontal Navigation Bar -->
+  <nav class="navbar navbar-expand-lg seatwise-navbar">
+    <div class="container-fluid px-2 px-md-4">
+      <a class="navbar-brand seatwise-brand" href="dashboard.html">
+        <i class="fas fa-th-large"></i>
+        <span>SeatWise</span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="adminNavbarContent">
+        <ul class="navbar-nav seatwise-nav-links me-auto mb-2 mb-lg-0 ms-lg-4 gap-1">
+          <li class="nav-item">
+            <a class="nav-link active" href="dashboard.html">
+              <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="students.html">
+              <i class="fas fa-user-graduate"></i> Students
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="exams.html">
+              <i class="fas fa-file-signature"></i> Exams
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="halls.html">
+              <i class="fas fa-door-open"></i> Halls
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="seating.html">
+              <i class="fas fa-chair"></i> Seating
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="reports.html">
+              <i class="fas fa-file-excel"></i> Reports
+            </a>
+          </li>
+        </ul>
+
+        <!-- Right Side: Admin Profile & Logout -->
+        <div class="d-flex align-items-center gap-3">
+          <div class="nav-profile-badge">
+            <i class="fas fa-user-circle text-primary fs-5"></i>
+            <span id="navAdminName">Prof. Alexander Wright</span>
+          </div>
+          <button class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1 px-3 py-2 fw-semibold" id="logoutBtn" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Dashboard Container -->
+  <main class="container-fluid px-3 px-md-5 py-4">
+
+    <!-- Page Header & Quick Action Buttons -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+      <div>
+        <h1 class="h3 fw-bold text-navy mb-1">Examination Control Dashboard</h1>
+        <p class="text-muted small mb-0">Overview of student registrations, upcoming examinations, and seating allocations</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="seating.html" class="btn btn-primary-seatwise d-flex align-items-center gap-2">
+          <i class="fas fa-magic"></i>
+          <span>Allocate Seating</span>
+        </a>
+        <a href="students.html?action=add" class="btn btn-outline-seatwise d-flex align-items-center gap-2">
+          <i class="fas fa-user-plus"></i>
+          <span>Add Student</span>
+        </a>
+        <a href="exams.html?action=new" class="btn btn-outline-seatwise d-flex align-items-center gap-2">
+          <i class="fas fa-calendar-plus"></i>
+          <span>Schedule Exam</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 4 KPI Summary Cards -->
+    <div class="row g-3 mb-4">
+      <!-- Total Students -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="seatwise-card kpi-card">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="kpi-label">Total Students</span>
+            <div class="kpi-icon-box bg-blue-subtle text-primary">
+              <i class="fas fa-user-graduate"></i>
+            </div>
+          </div>
+          <h2 class="kpi-number tabular-nums" id="statTotalStudents">--</h2>
+          <div class="d-flex align-items-center text-muted small mt-2">
+            <i class="fas fa-id-badge me-1 text-primary"></i>
+            <span>Enrolled across all departments</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Exams -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="seatwise-card kpi-card">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="kpi-label">Total Exams</span>
+            <div class="kpi-icon-box bg-indigo-subtle text-indigo">
+              <i class="fas fa-file-alt"></i>
+            </div>
+          </div>
+          <h2 class="kpi-number tabular-nums" id="statTotalExams">--</h2>
+          <div class="d-flex align-items-center text-muted small mt-2">
+            <i class="fas fa-calendar-check me-1 text-success"></i>
+            <span>Scheduled & Active assessments</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Halls -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="seatwise-card kpi-card">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="kpi-label">Total Halls</span>
+            <div class="kpi-icon-box bg-amber-subtle text-warning">
+              <i class="fas fa-building"></i>
+            </div>
+          </div>
+          <h2 class="kpi-number tabular-nums" id="statTotalHalls">--</h2>
+          <div class="d-flex align-items-center text-muted small mt-2">
+            <i class="fas fa-chair me-1 text-warning"></i>
+            <span id="statCapacityLabel">-- Available Seats</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Allocations -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="seatwise-card kpi-card">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="kpi-label">Seat Allocations</span>
+            <div class="kpi-icon-box bg-emerald-subtle text-success">
+              <i class="fas fa-check-double"></i>
+            </div>
+          </div>
+          <h2 class="kpi-number tabular-nums" id="statTotalAllocations">--</h2>
+          <div class="d-flex align-items-center text-muted small mt-2">
+            <i class="fas fa-check-circle me-1 text-success"></i>
+            <span>Assigned student seats</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row: Department Distribution & Hall Capacity Status -->
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-lg-6">
+        <div class="seatwise-card h-100">
+          <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+            <h3 class="h6 fw-bold text-navy mb-0">
+              <i class="fas fa-chart-pie me-2 text-primary"></i>Students by Department
+            </h3>
+            <span class="text-muted small">Active Enrollment</span>
+          </div>
+          <div class="chart-container" style="position: relative; height: 260px;">
+            <canvas id="deptChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="seatwise-card h-100">
+          <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+            <h3 class="h6 fw-bold text-navy mb-0">
+              <i class="fas fa-chart-bar me-2 text-primary"></i>Examination Hall Capacity & Load
+            </h3>
+            <span class="text-muted small">Capacity Utilization</span>
+          </div>
+          <div class="chart-container" style="position: relative; height: 260px;">
+            <canvas id="hallChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tables Row: Upcoming Examinations & Recent Student Registrations -->
+    <div class="row g-4">
+      <!-- Upcoming Examinations -->
+      <div class="col-12 col-lg-7">
+        <div class="seatwise-card h-100 p-0 overflow-hidden">
+          <div class="p-3 bg-white border-bottom d-flex align-items-center justify-content-between">
+            <h3 class="h6 fw-bold text-navy mb-0">
+              <i class="fas fa-clock me-2 text-primary"></i>Upcoming Examination Schedule
+            </h3>
+            <a href="exams.html" class="small fw-semibold text-primary text-decoration-none">View All Exams &rarr;</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-seatwise mb-0">
+              <thead>
+                <tr>
+                  <th>Exam / Subject</th>
+                  <th>Date & Session</th>
+                  <th>Allocated Seats</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentExamsTableBody">
+                <tr>
+                  <td colspan="5" class="text-center py-4 text-muted">
+                    <span class="spinner-border spinner-border-sm me-2"></span>Loading exams...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Students -->
+      <div class="col-12 col-lg-5">
+        <div class="seatwise-card h-100 p-0 overflow-hidden">
+          <div class="p-3 bg-white border-bottom d-flex align-items-center justify-content-between">
+            <h3 class="h6 fw-bold text-navy mb-0">
+              <i class="fas fa-user-clock me-2 text-primary"></i>Recently Registered Students
+            </h3>
+            <a href="students.html" class="small fw-semibold text-primary text-decoration-none">Manage Students &rarr;</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-seatwise mb-0">
+              <thead>
+                <tr>
+                  <th>Roll No</th>
+                  <th>Name</th>
+                  <th>Dept / Yr</th>
+                </tr>
+              </thead>
+              <tbody id="recentStudentsTableBody">
+                <tr>
+                  <td colspan="3" class="text-center py-4 text-muted">
+                    <span class="spinner-border spinner-border-sm me-2"></span>Loading students...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="text-center py-3 text-muted small border-top mt-5 bg-white">
+    <div class="container">
+      SeatWise – Exam Seating Arrangement System &middot; Modern Blue + Navy Architecture &middot; Automated Seat Allocations
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

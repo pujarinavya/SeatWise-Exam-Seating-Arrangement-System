@@ -1,0 +1,51 @@
+/* Dashboard Styles */
+.kpi-card {
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+}
+
+.kpi-label {
+  font-size: 0.825rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748B;
+}
+
+.kpi-number {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #1E3A8A;
+  margin-bottom: 0;
+  line-height: 1.1;
+}
+
+.kpi-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.bg-blue-subtle {
+  background-color: #DBEAFE;
+}
+
+.bg-indigo-subtle {
+  background-color: #E0E7FF;
+}
+
+.text-indigo {
+  color: #4F46E5;
+}
+
+.bg-amber-subtle {
+  background-color: #FEF3C7;
+}
+
+.bg-emerald-subtle {
+  background-color: #D1FAE5;
+}

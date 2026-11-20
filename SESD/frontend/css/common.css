@@ -1,0 +1,237 @@
+/* ========================================================
+   SeatWise – Common Professional Design Theme
+   Modern Blue + Navy + White Palette
+   ======================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --primary-navy: #1E3A8A;
+  --primary-blue: #3B82F6;
+  --hover-blue: #2563EB;
+  --main-bg: #F8FAFC;
+  --white: #FFFFFF;
+  --main-text: #0F172A;
+  --secondary-text: #64748B;
+  --border-color: #DBEAFE;
+  --light-blue-bg: #EEF4FF;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --card-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.05), 0 2px 4px -2px rgba(30, 58, 138, 0.04);
+  --card-shadow-hover: 0 10px 15px -3px rgba(30, 58, 138, 0.08), 0 4px 6px -4px rgba(30, 58, 138, 0.04);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--main-bg);
+  color: var(--main-text);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Horizontal Top Navigation Bar */
+.seatwise-navbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(30, 58, 138, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  padding: 0.65rem 1.5rem;
+}
+
+.seatwise-brand {
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--primary-navy);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.seatwise-brand i {
+  color: var(--primary-blue);
+  font-size: 1.35rem;
+}
+
+.seatwise-nav-links .nav-link {
+  color: var(--secondary-text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.15s ease-in-out;
+  text-decoration: none;
+}
+
+.seatwise-nav-links .nav-link:hover {
+  color: var(--primary-blue);
+  background-color: var(--light-blue-bg);
+}
+
+.seatwise-nav-links .nav-link.active {
+  color: var(--white) !important;
+  background-color: var(--primary-navy) !important;
+  box-shadow: 0 2px 4px rgba(30, 58, 138, 0.2);
+}
+
+.seatwise-nav-links .nav-link.active i {
+  color: #93C5FD;
+}
+
+/* User Profile Badge in Navbar */
+.nav-profile-badge {
+  background: var(--light-blue-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-navy);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Buttons */
+.btn-primary-seatwise {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+  color: var(--white);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.5rem 1.15rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-primary-seatwise:hover {
+  background-color: var(--hover-blue);
+  border-color: var(--hover-blue);
+  color: var(--white);
+}
+
+.btn-navy-seatwise {
+  background-color: var(--primary-navy);
+  border-color: var(--primary-navy);
+  color: var(--white);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.5rem 1.15rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-navy-seatwise:hover {
+  background-color: #172554;
+  border-color: #172554;
+  color: var(--white);
+}
+
+.btn-outline-seatwise {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--primary-navy);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.5rem 1.15rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-outline-seatwise:hover {
+  background-color: var(--light-blue-bg);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+/* Cards */
+.seatwise-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.seatwise-card:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* Tables */
+.table-seatwise {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-seatwise thead th {
+  background-color: var(--light-blue-bg);
+  color: var(--primary-navy);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid var(--border-color);
+  border-top: none;
+}
+
+.table-seatwise tbody td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 0.9rem;
+  color: var(--main-text);
+}
+
+.table-seatwise tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+/* Badges */
+.badge-dept {
+  background-color: var(--light-blue-bg);
+  color: var(--primary-navy);
+  border: 1px solid var(--border-color);
+  font-weight: 600;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.badge-status-scheduled {
+  background-color: #FEF3C7;
+  color: #92400E;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.badge-status-completed {
+  background-color: #D1FAE5;
+  color: #065F46;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+/* Toast Alerts Container */
+#toastContainer {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 9999;
+}
